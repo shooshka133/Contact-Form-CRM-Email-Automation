@@ -1,59 +1,121 @@
-# 📬 Contact Form CRM + Email Automation (n8n)
 
-This project captures form submissions from a GitHub-hosted HTML form and automates syncing to Google Sheets, Airtable, and email delivery — all using n8n.
+# 📬 Contact Form CRM & Email Automation (n8n + Google Sheets + Airtable + Gmail)
 
-## 🌐 Live Form
-Hosted on GitHub Pages using `index.html`.
+Easily capture leads from a contact form hosted on GitHub Pages and automate the storage, tracking, and confirmation email sending using **n8n**, **Google Sheets**, **Airtable**, and **Gmail**.
 
-## ⚙️ What It Does
+---
 
-- 📥 Captures form submissions via **Webhook**
-- 📝 Formats data using **Set Node**
-- 📄 Appends to **Google Sheets**
-- 📋 Creates a new record in **Airtable**
-- 📧 Sends a confirmation **Email** to the user
+## 🔧 What It Does
 
-## 🧱 Workflow Structure
+- Captures contact form submissions via a public HTML form
+- Sends an automated thank-you email to the user
+- Appends data to:
+  - 📄 Google Sheets
+  - 📋 Airtable
+- Timestamps each entry
 
-```
-Webhook → Set Fields → [ Google Sheets | Airtable | Email ]
-```
+---
 
-## 🛠 Tools Used
+## 🛠️ Tools Used
 
-| Tool         | Purpose                         |
-|--------------|----------------------------------|
-| n8n          | Automation workflow              |
-| Google Sheets| CRM entry storage                |
-| Airtable     | Filtering & tagging              |
-| Gmail (n8n)  | Auto-email to user               |
-| GitHub Pages | Form hosting                     |
+| Tool         | Purpose                     |
+|--------------|-----------------------------|
+| `n8n`        | Core workflow automation    |
+| `Google Sheets` | Lead storage & backup     |
+| `Airtable`   | CRM-friendly interface       |
+| `Gmail`      | Send confirmation email      |
+| `GitHub Pages` | Hosts the contact form    |
 
-## 📝 Fields Tracked
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Deploy the Contact Form
+
+- Host `index.html` (form) using GitHub Pages  
+- Make sure the form action is pointed to your **n8n webhook URL**:
+  ```html
+  <form action="https://your-n8n-domain/webhook/your-workflow-id" method="POST">
+  ```
+
+### 2. Configure the n8n Workflow
+
+- Create a new workflow in `n8n`
+- Nodes used:
+  - **Webhook**: Receives form POST
+  - **Set**: Formats data and adds timestamp
+  - **Google Sheets Append Row**: Stores lead
+  - **Airtable Create Record**: Stores CRM entry
+  - **Email**: Sends thank-you message to user
+- Make sure to authenticate with:
+  - Google Sheets OAuth
+  - Airtable personal access token
+  - Gmail account or SMTP credentials
+
+### 3. Update Google Sheet & Airtable Structure
+
+Both Google Sheet and Airtable should contain these fields:
 
 - `name`
 - `email`
 - `message`
-- `submitted_at` (auto timestamp)
+- `submitted_at` (Date/Time field)
 
-## 📂 Files in This Repo
-
-- `index.html` – The contact form (hosted)
-- `Contact_Form_Workflow.json` – n8n export file
-- `README.md` – This file
-- `screenshots/` – Optional screenshots of workflow and results
-
-## ✅ Setup Instructions
-
-1. Import `Contact_Form_Workflow.json` into your n8n.
-2. Replace the webhook URL in `index.html` with your n8n webhook.
-3. Set up credentials for:
-   - Google Sheets (OAuth2)
-   - Airtable
-   - Gmail
-4. Deploy the form on GitHub Pages or similar.
-5. Submit the form to see data flow into your CRM and inbox!
+> 🔁 Use `{{ [new Date().toISOString()] }}` to generate the timestamp value inside the Set node.
 
 ---
 
-**Built with ❤️ using n8n**
+## ✅ Live Demo Result
+
+Below is a sample output of the automation in action:
+
+### 🔢 Airtable Records
+
+![Airtable_Output](screenshots/Airtable_Output.png)
+
+### 📬 Email Confirmation Sent
+
+![Email_Confirmation](screenshots/Email_Confirmation.png)
+
+### 📄 Google Sheet
+
+![GoogleSheet_output](screenshots/GoogleSheet_output.png)
+
+### 🌐 Live Form
+
+![Live_form](screenshots/Live_form.png)
+
+### 🔁 n8n Workflow
+
+![workflow](screenshots/workflow.png)
+
+---
+
+## 🧠 Extend Ideas
+
+- Add validation or spam filtering
+- Push leads to Notion or Trello
+- Schedule summary report emails
+- Use OpenAI to auto-categorize messages
+- Integrate with CRMs like HubSpot or Pipedrive
+
+---
+
+## 📂 Files in Repo
+
+- `index.html` → The public contact form
+- `Contact_Form_Workflow.json` → Exported n8n workflow
+- `/screenshots` → Visuals of form + output
+- `README.md` → You’re reading it
+
+---
+
+## 🔐 Privacy Notice
+
+For demo purposes, test emails and Airtable screenshots may contain mock or obfuscated data.
+
+---
+
+## 🧩 License
+
+MIT License
