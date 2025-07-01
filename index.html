@@ -23,7 +23,8 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(form));
-      await fetch('http://localhost:5678/webhook-test/3fdd18a3-ac00-411a-bde1-c193a897cf0a', {
+      await fetch('http://localhost:5678/webhook-test/465e916a-0d02-4578-9d25-9c39812bd970'
+                  , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
