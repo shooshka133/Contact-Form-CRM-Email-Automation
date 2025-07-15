@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register & Pay</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    form {
+      background: white;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.9em;
+      margin: 0.5em 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4A90E2;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #357ABD;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="reg-form">
+    <h2>Register & Pay</h2>
+    <input name="name" placeholder="Full Name" required />
+    <input name="email" type="email" placeholder="Email Address" required />
+    <select name="plan" required>
+      <option value="">Choose a Plan</option>
+      <option value="Basic">Basic - $10</option>
+      <option value="Silver">Silver - $20</option>
+      <option value="Gold">Gold - $50</option>
+    </select>
+    <button type="submit">Continue to Payment</button>
+  </form>
+
+  <script>
+    document.getElementById('reg-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const data = new URLSearchParams(form);
+
+      try {
+        const res = await fetch('https://shoosh.app.n8n.cloud/webhook-test/start-process', {
+          method: 'POST',
+          body: data
+        });
+
+        const result = await res.json();
+        if (result.payment_url) {
+          window.location.href = result.payment_url; // 🔁 Redirect to Stripe
+        } else {
+          alert('Error: No payment URL returned.');
+        }
+      } catch (err) {
+        alert('Something went wrong: ' + err.message);
+      }
+    });
+  </script>
+
+</body>
+</html>
