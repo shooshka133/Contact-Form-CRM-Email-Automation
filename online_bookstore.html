@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Bookstore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4A90E2;
+      color: white;
+      text-align: center;
+      padding: 1em;
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5em;
+      padding: 2em;
+    }
+    .book {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 1em;
+      text-align: center;
+    }
+    .book img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .book-title {
+      font-weight: bold;
+      margin: 1em 0 0.5em;
+    }
+    .book-price {
+      color: #4A90E2;
+      font-weight: bold;
+    }
+    .book button {
+      margin-top: 0.5em;
+      background-color: #4A90E2;
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Online Bookstore</h1>
+    <p>Choose a book to buy or download based on your plan</p>
+  </header>
+  <main class="book-grid">
+    <!-- Example Book Cards -->
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+1" alt="Book 1">
+      <div class="book-title">Book Title 1</div>
+      <div class="book-price">$5.00</div>
+      <button onclick="handlePurchase('Book Title 1', 5)">Buy</button>
+    </div>
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div>
+     <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div> 
+    <div class="book">
+      <img src="https://placehold.co/200x300?text=Book+2" alt="Book 2">
+      <div class="book-title">Book Title 2</div>
+      <div class="book-price">$8.00</div>
+      <button onclick="handlePurchase('Book Title 2', 8)">Buy</button>
+    </div>
+    <!-- Add 8 more books in same pattern -->
+    <!-- ... -->
+  </main>
+
+  <script>
+    function handlePurchase(title, price) {
+  const user = localStorage.getItem("userEmail");
+  if (!user) {
+    alert("Please sign up or log in first.");
+    window.location.href = "signup_page.html"; // Use relative path
+  } else {
+    fetch("https://shoosh.app.n8n.cloud/webhook-test/submitted-form1", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, price, email: user })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Payment link could not be generated.");
+      }
+    });
+  }
+}
+
+  </script>
+</body>
+</html>       

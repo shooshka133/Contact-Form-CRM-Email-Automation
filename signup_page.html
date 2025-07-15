@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Online Bookstore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    form {
+      background: white;
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #4A90E2;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #4A90E2;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3a76c3;
+    }
+  </style>
+</head>
+<body>
+  <form id="signup-form">
+    <h2>Create Your Account</h2>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <label for="plan">Choose a Plan:</label>
+    <select id="plan" required>
+      <option value="Free">Free - 1 download/month</option>
+      <option value="Basic">Basic - 3 downloads/month</option>
+      <option value="Silver">Silver - 10 downloads/month</option>
+      <option value="Gold">Gold - unlimited downloads</option>
+    </select>
+    <button type="submit">Sign Up</button>
+  </form>
+  <script>
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        plan: document.getElementById("plan").value
+      };
+
+      try {
+        const res = await fetch("https://shoosh.app.n8n.cloud/webhook-test/register-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          localStorage.setItem("userEmail", user.email);
+          localStorage.setItem("userPlan", user.plan);
+          alert("Registration successful! Redirecting to payment...");
+
+          fetch("https://shoosh.app.n8n.cloud/webhook-test/submitted-form1", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: "Welcome Book", price: 0, email: user.email })
+          })
+          .then(r => r.json())
+          .then(data => {
+            if (data.url) {
+              window.location.href = data.url;
+            } else {
+              window.location.href = "online_bookstore.html";
+            }
+          });
+
+        } else {
+          alert("Registration failed: " + result.message);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Something went wrong.");
+      }
+    });
+  </script>
+</body>
+</html>
